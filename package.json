@@ -1,0 +1,47 @@
+{
+  "name": "monolieta-virtual-scroll",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "~21.0.0",
+    "@rollup/plugin-typescript": "~8.3.0",
+    "@types/jest": "~27.0.2",
+    "@types/react": "~17.0.30",
+    "jest": "~27.3.0",
+    "rollup": "~2.58.0",
+    "rollup-plugin-dts": "~4.0.0",
+    "rollup-plugin-peer-deps-external": "~2.2.4",
+    "rollup-plugin-terser": "~7.0.2",
+    "ts-jest": "~27.0.7",
+    "tslib": "~2.3.1",
+    "typescript": "~4.4.4"
+  },
+  "keywords": [
+    "grid",
+    "list"
+  ],
+  "license": "MIT",
+  "author": "Jonattan Velásquez <jonattanva89@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonattanva/monolieta-virtual-scroll.git"
+  },
+  "engines": {
+    "node": ">=14.x"
+  }
+}
