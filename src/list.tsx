@@ -6,25 +6,20 @@ import useVisible from "./hook/use-visible";
 
 type PropTypes = {
     children: React.ReactNode[];
-    columnCount: number;
-    padding?: number;
-    rowHeight: number;
-    rowWidth: number;
+    height: number;
+    width: number;
 };
 
-const Grid = ({ padding = 0, ...props }: PropTypes) => {
+const List = (props: PropTypes) => {
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const scrollPosition = useScroll(scrollRef);
 
-    const columns = props.columnCount;
+    const columns = 1;
     const total = props.children.length;
     const rows = useRow(columns, total);
 
-    const rowHeight = props.rowHeight + padding * 2;
-    const rowWidth = props.rowWidth + padding * 2;
-
-    const totalHeight = rows * rowHeight;
-    const totalWidth = columns * rowWidth;
+    const totalHeight = rows * props.height;
+    const totalWidth = columns * props.width;
 
     const offsetWidth = scrollRef.current ? scrollRef.current.clientWidth : 0;
     const offsetX = offsetWidth - totalWidth;
@@ -32,11 +27,11 @@ const Grid = ({ padding = 0, ...props }: PropTypes) => {
     const scrollTop = scrollPosition ? scrollPosition.scrollTop : 0;
     const scrollHeight = scrollPosition ? scrollPosition.size.height : 0;
 
-    let startNode = Math.max(0, Math.floor(scrollTop / rowHeight));
-    let visibleNodeCount = Math.ceil(scrollHeight / rowHeight) + 2;
+    let startNode = Math.max(0, Math.floor(scrollTop / props.height));
+    let visibleNodeCount = Math.ceil(scrollHeight / props.height) + 2;
     visibleNodeCount = Math.min(rows - startNode, visibleNodeCount) * columns;
 
-    const offsetY = startNode * rowHeight;
+    const offsetY = startNode * props.height;
     startNode = startNode * columns;
 
     const visibleChildren = useVisible(
@@ -47,9 +42,8 @@ const Grid = ({ padding = 0, ...props }: PropTypes) => {
         <div
             key={index}
             style={{
-                height: `${props.rowHeight}px`,
-                margin: `${padding}px`,
-                width: `${props.rowWidth}px`,
+                height: `${props.height}px`,
+                width: `${props.width}px`,
             }}
         >
             {item}
@@ -65,4 +59,4 @@ const Grid = ({ padding = 0, ...props }: PropTypes) => {
     );
 };
 
-export default Grid;
+export default List;
