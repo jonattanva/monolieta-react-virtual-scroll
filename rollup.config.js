@@ -1,4 +1,5 @@
 import dts from "rollup-plugin-dts";
+import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
@@ -22,7 +23,7 @@ export default [
                 format: "esm",
             },
         ],
-        plugins: [external(), commonjs(), typescript()],
+        plugins: [postcss(), external(), commonjs(), typescript()],
     },
     {
         input: "types/index.d.ts",
