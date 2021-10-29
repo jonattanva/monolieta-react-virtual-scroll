@@ -32,7 +32,7 @@ const List = (props: PropTypes) => {
             ref={listRef}
             renderer={renderer}
             rowHeight={props.rowHeight}
-            rowWidth="auto"
+            columnWidth="auto"
             scrollTop={props.scrollTop}
         >
             {props.children}

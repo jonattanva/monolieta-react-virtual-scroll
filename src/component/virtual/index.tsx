@@ -6,11 +6,11 @@ import { forwardRef, useEffect } from "react";
 type PropTypes = {
     children: React.ReactNode[];
     columnCount: number;
+    columnWidth: number | "auto";
     onScroll?: (scrollTop: number) => void;
     padding?: number;
     renderer: (children: React.ReactNode, key: number) => React.ReactNode;
     rowHeight: number;
-    rowWidth: number | "auto";
     scrollTop?: number;
 };
 
@@ -32,9 +32,9 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
 
     const rowHeight = props.rowHeight + padding * 2;
     const rowWidth =
-        (props.rowWidth === "auto"
+        (props.columnWidth === "auto"
             ? scrollPosition?.size.width ?? 0
-            : props.rowWidth) +
+            : props.columnWidth) +
         padding * 2;
 
     const totalHeight = rows * rowHeight;

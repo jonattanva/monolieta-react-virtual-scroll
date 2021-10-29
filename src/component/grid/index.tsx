@@ -4,10 +4,10 @@ import { useRef } from "react";
 type PropTypes = {
     children: React.ReactNode[];
     columnCount: number;
+    columnWidth: number;
     onScroll?: (scrollTop: number) => void;
     padding?: number;
     rowHeight: number;
-    rowWidth: number;
     scrollTop?: number;
 };
 
@@ -20,7 +20,7 @@ export const Grid = (props: PropTypes) => {
             style={{
                 height: `${props.rowHeight}px`,
                 margin: `${props.padding ?? 0}px`,
-                width: `${props.rowWidth}px`,
+                width: `${props.columnWidth}px`,
             }}
         >
             {children}
@@ -35,7 +35,7 @@ export const Grid = (props: PropTypes) => {
             ref={gridRef}
             renderer={renderer}
             rowHeight={props.rowHeight}
-            rowWidth={props.rowWidth}
+            columnWidth={props.columnWidth}
             scrollTop={props.scrollTop}
         >
             {props.children}

@@ -1,4 +1,5 @@
 ![monolieta-virtual-scroll](https://badgen.net/bundlephobia/minzip/monolieta-virtual-scroll)
+[![Coverage Status](https://coveralls.io/repos/github/jonattanva/monolieta-virtual-scroll/badge.svg?branch=main)](https://coveralls.io/github/jonattanva/monolieta-virtual-scroll?branch=main)
 
 # Monolieta-Virtual-Scroll
 The [React](https://reactjs.com) Component for rendering large lists
@@ -16,7 +17,9 @@ npm install monolieta-virtual-scroll -P
 ```
 
 ## Documentation
-API documentation available [here](docs/README.md).
+
+- [Grid](doc/grid.md)
+- [List](doc/list.md)
 
 ## License
 This project is licensed under the MIT License.
