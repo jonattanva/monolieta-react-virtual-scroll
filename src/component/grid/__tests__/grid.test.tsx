@@ -28,7 +28,7 @@ describe("<Grid/>", () => {
                     columnCount={2}
                     onScroll={onScroll}
                     rowHeight={100}
-                    rowWidth={100}
+                    columnWidth={100}
                     scrollTop={100}
                 >
                     {dataset}
@@ -44,7 +44,7 @@ describe("<Grid/>", () => {
 
         render(
             <div style={{ height: "200px", width: "400px" }}>
-                <Grid columnCount={2} rowHeight={100} rowWidth={100}>
+                <Grid columnCount={2} rowHeight={100} columnWidth={100}>
                     {dataset}
                 </Grid>
             </div>
