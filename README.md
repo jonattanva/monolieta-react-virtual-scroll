@@ -13,7 +13,7 @@ yarn add monolieta-virtual-scroll
 ```
 
 ```shell
-npm install monolieta-virtual-scroll -P
+npm install monolieta-virtual-scroll
 ```
 
 ## Documentation
