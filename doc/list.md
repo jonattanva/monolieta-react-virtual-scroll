@@ -3,11 +3,11 @@
 List (rows) of elements
 
 ## Attributes
-| Property                | Type              | Required | Description          |
-| ----------------------- | ----------------- | -------- | -------------------- |
-| rowHeight               | number            |    ✔️     | Fixed row height     |
-| onScroll                | function          |          | Callback invoked whenever the scroll offset changes |
-| scrollTop               | function          |          | Vertical offset      |
+| Property                | Type              | Required   | Description          |
+| ----------------------- | ----------------- | :--------: | -------------------- |
+| rowHeight               | number            |     ✓      | Fixed row height     |
+| onScroll                | function          |            | Callback invoked whenever the scroll offset changes |
+| scrollTop               | function          |            | Vertical offset      |
 
 
 ## Example
