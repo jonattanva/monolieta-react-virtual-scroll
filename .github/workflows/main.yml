@@ -1,0 +1,199 @@
+name: "Main action"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  install-linux:
+    name: "Install linux dependencies"
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }} 🐲
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get npm cache directory path 📦
+        id: npm-cache-dir-path
+        run: echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v2
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies 📦
+        run: npm install
+
+  install-windows:
+    name: "Install windows dependencies"
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }} 🐲
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get npm cache directory path 📦
+        id: npm-cache-dir-path
+        run: echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v2
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies 📦
+        run: npm install
+
+  test-linux:
+    name: "Unit testing"
+    timeout-minutes: 30
+
+    needs: install-linux
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }} 🐲
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get npm cache directory path 📦
+        id: npm-cache-dir-path
+        run: echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v2
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies 📦
+        run: npm install
+
+      - name: Unit Tests 🐞
+        run: npm test -- --coverage
+
+      - name: Coverage artifacts 🧳
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          retention-days: 1
+          path: |
+            coverage
+
+  test-windows:
+    name: "Unit testing"
+    timeout-minutes: 30
+
+    needs: install-windows
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }} 🐲
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get npm cache directory path 📦
+        id: npm-cache-dir-path
+        run: echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v2
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies 📦
+        run: npm install
+
+      - name: Unit Tests 🐞
+        run: npm test
+
+  report-coverage:
+    name: "Report coverage"
+    timeout-minutes: 30
+
+    needs: test-linux
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout repository 🛎
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }} 🐲
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get npm cache directory path 📦
+        id: npm-cache-dir-path
+        run: echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v2
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Download a coverage artifacts 🧳
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage
+
+      - name: Coveralls 🔮
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
