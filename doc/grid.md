@@ -3,13 +3,13 @@
 Lists in an organized grid.
 
 ## Attributes
-| Property                | Type              | Required | Description          |
-| ----------------------- | ----------------- | -------- | -------------------- |
-| columnCount             | number            |    ✔️     | Number of columns in grid |
-| rowHeight               | number            |    ✔️     | Fixed row height     |
-| columnWidth             | number            |    ✔️     | Fixed column width   |
-| onScroll                | function          |          | Callback invoked whenever the scroll offset changes |
-| scrollTop               | function          |          | Vertical offset      |
+| Property                | Type              | Required   | Description          |
+| ----------------------- | ----------------- | :--------: | -------------------- |
+| columnCount             | number            |     ✓      | Number of columns in grid |
+| rowHeight               | number            |     ✓      | Fixed row height     |
+| columnWidth             | number            |     ✓      | Fixed column width   |
+| onScroll                | function          |            | Callback invoked whenever the scroll offset changes |
+| scrollTop               | function          |            | Vertical offset      |
 
 
 ## Example
