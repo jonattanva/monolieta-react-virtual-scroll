@@ -13,6 +13,9 @@ Lists in an organized grid.
 | className               | string            |            | CSS class name       |
 
 
+## Mockup
+<img src="../.github/image/grid.svg" width="300" />
+
 ## Example
 
 ```jsx
