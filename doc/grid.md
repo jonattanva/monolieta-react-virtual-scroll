@@ -12,9 +12,8 @@ Lists in an organized grid.
 | scrollTop               | function          |            | Vertical offset      |
 | className               | string            |            | CSS class name       |
 
-
 ## Mockup
-<img src="../.github/image/grid.svg" width="300" />
+<img src="../.github/image/grid.png" width="300" />
 
 ## Example
 
