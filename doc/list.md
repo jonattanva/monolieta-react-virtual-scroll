@@ -10,6 +10,8 @@ List (rows) of elements
 | scrollTop               | function          |            | Vertical offset      |
 | className               | string            |            | CSS class name       |
 
+## Mockup
+<img src="../.github/image/list.png" width="300" />
 
 ## Example
 
