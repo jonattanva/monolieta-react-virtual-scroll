@@ -18,6 +18,23 @@ describe("<Grid/>", () => {
         };
     });
 
+    it("custom style", () => {
+        window.resizeTo(500, 500);
+
+        render(
+            <div style={{ height: "200px", width: "400px" }}>
+                <List rowHeight={100} scrollTop={100} className="test-class">
+                    {dataset}
+                </List>
+            </div>
+        );
+
+        const container = screen.getByRole("list");
+        expect(container).toHaveClass(
+            "monolieta-virtual-scroll__main test-class"
+        );
+    });
+
     it("vertical offset", async () => {
         window.resizeTo(500, 500);
 
@@ -44,5 +61,18 @@ describe("<Grid/>", () => {
 
         const items = await screen.findAllByText(/row [0-9]/);
         expect(items).toHaveLength(2);
+    });
+
+    it("general style", () => {
+        window.resizeTo(500, 500);
+
+        render(
+            <div style={{ height: "200px", width: "400px" }}>
+                <List rowHeight={100}>{dataset}</List>
+            </div>
+        );
+
+        const container = screen.getByRole("list");
+        expect(container).toHaveClass("monolieta-virtual-scroll__main");
     });
 });

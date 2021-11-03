@@ -5,6 +5,7 @@ import { forwardRef, useEffect } from "react";
 
 type PropTypes = {
     children: React.ReactNode[];
+    className?: string;
     columnCount: number;
     columnWidth: number | "auto";
     onScroll?: (scrollTop: number) => void;
@@ -62,14 +63,18 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
         width: `calc(100% - ${offsetX}px)`,
     };
 
+    const className = !props.className
+        ? "monolieta-virtual-scroll__main"
+        : `monolieta-virtual-scroll__main ${props.className}`;
+
     return (
-        <div ref={ref} className="monolieta__virtual-scroll-main" role="list">
+        <div ref={ref} className={className} role="list">
             <div
-                className="monolieta__virtual-scroll-viewport"
+                className="monolieta-virtual-scroll__viewport"
                 style={{ height: totalHeight }}
             >
                 <div
-                    className="monolieta__virtual-scroll-body"
+                    className="monolieta-virtual-scroll__body"
                     style={position}
                 >
                     {visibleChildren}

@@ -3,6 +3,7 @@ import { useRef } from "react";
 
 type PropTypes = {
     children: React.ReactNode[];
+    className?: string;
     columnCount: number;
     columnWidth: number;
     onScroll?: (scrollTop: number) => void;
@@ -29,13 +30,14 @@ export const Grid = (props: PropTypes) => {
 
     return (
         <Virtual
+            className={props.className}
             columnCount={props.columnCount}
+            columnWidth={props.columnWidth}
             onScroll={props.onScroll}
             padding={props.padding}
             ref={gridRef}
             renderer={renderer}
             rowHeight={props.rowHeight}
-            columnWidth={props.columnWidth}
             scrollTop={props.scrollTop}
         >
             {props.children}

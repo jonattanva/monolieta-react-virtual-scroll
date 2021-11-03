@@ -1,18 +1,17 @@
-.monolieta__virtual-scroll-main {
+.monolieta-virtual-scroll__main {
     align-items: stretch;
     background: transparent;
     display: flex;
     height: 100%;
     margin: 0;
     overflow: auto;
-    scrollbar-gutter: auto;
     position: relative;
     transform: translateZ(0);
     width: 100%;
     will-change: scroll-position;
 }
 
-.monolieta__virtual-scroll-viewport {
+.monolieta-virtual-scroll__viewport {
     min-height: 100%;
     overflow: hidden;
     position: absolute;
@@ -21,7 +20,7 @@
     will-change: transform;
 }
 
-.monolieta__virtual-scroll-body {
+.monolieta-virtual-scroll__body {
     align-content: flex-start;
     align-items: flex-start;
     contain: content;

@@ -8,6 +8,7 @@ List (rows) of elements
 | rowHeight               | number            |     ✓      | Fixed row height     |
 | onScroll                | function          |            | Callback invoked whenever the scroll offset changes |
 | scrollTop               | function          |            | Vertical offset      |
+| className               | string            |            | CSS class name       |
 
 
 ## Example

@@ -1,6 +1,6 @@
 import Grid from "..";
 import "@testing-library/jest-dom";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 const dataset = new Array(6).fill(null).map((_, i) => {
     return <div key={i}>{`row ${i}`}</div>;
@@ -16,6 +16,49 @@ describe("<Grid/>", () => {
                 outerHeight: height,
             }).dispatchEvent(new this.Event("resize"));
         };
+    });
+
+    it("general style", () => {
+        window.resizeTo(500, 500);
+
+        render(
+            <div style={{ height: "200px", width: "400px" }}>
+                <Grid
+                    columnCount={2}
+                    rowHeight={100}
+                    columnWidth={100}
+                    scrollTop={100}
+                >
+                    {dataset}
+                </Grid>
+            </div>
+        );
+
+        const container = screen.getByRole("list");
+        expect(container).toHaveClass("monolieta-virtual-scroll__main");
+    });
+
+    it("custom style", () => {
+        window.resizeTo(500, 500);
+
+        render(
+            <div style={{ height: "200px", width: "400px" }}>
+                <Grid
+                    className="test-class"
+                    columnCount={2}
+                    rowHeight={100}
+                    columnWidth={100}
+                    scrollTop={100}
+                >
+                    {dataset}
+                </Grid>
+            </div>
+        );
+
+        const container = screen.getByRole("list");
+        expect(container).toHaveClass(
+            "monolieta-virtual-scroll__main test-class"
+        );
     });
 
     it("vertical offset", async () => {

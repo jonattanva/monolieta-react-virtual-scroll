@@ -3,6 +3,7 @@ import { useRef } from "react";
 
 type PropTypes = {
     children: React.ReactNode[];
+    className?: string;
     onScroll?: (scrollTop: number) => void;
     padding?: number;
     rowHeight: number;
@@ -26,13 +27,14 @@ const List = (props: PropTypes) => {
 
     return (
         <Virtual
+            className={props.className}
             columnCount={1}
+            columnWidth="auto"
             onScroll={props.onScroll}
             padding={props.padding}
             ref={listRef}
             renderer={renderer}
             rowHeight={props.rowHeight}
-            columnWidth="auto"
             scrollTop={props.scrollTop}
         >
             {props.children}
