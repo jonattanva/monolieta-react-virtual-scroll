@@ -15,7 +15,7 @@ Lists in an organized grid.
 ## Mockup
 <img src="../.github/image/grid.png" width="300" />
 
-## Example
+## Usage
 
 ```jsx
 import ReactDOM from 'react-dom';

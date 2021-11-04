@@ -13,7 +13,7 @@ List (rows) of elements
 ## Mockup
 <img src="../.github/image/list.png" width="300" />
 
-## Example
+## Usage
 
 ```jsx
 import ReactDOM from 'react-dom';
