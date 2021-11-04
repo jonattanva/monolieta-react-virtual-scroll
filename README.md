@@ -20,6 +20,7 @@ npm install monolieta-virtual-scroll
 
 - [Grid](doc/grid.md)
 - [List](doc/list.md)
+- [Style](doc/style.md)
 
 ## License
 This project is licensed under the MIT License.
