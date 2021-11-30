@@ -22,7 +22,7 @@
     "@types/react": "~17.0.34",
     "identity-obj-proxy": "~3.0.0",
     "jest": "~27.3.1",
-    "postcss": "~8.3.11",
+    "postcss": "~8.4.4",
     "rollup": "~2.60.0",
     "rollup-plugin-dts": "~4.0.0",
     "rollup-plugin-peer-deps-external": "~2.2.4",
