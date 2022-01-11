@@ -10,7 +10,7 @@ const Main = () => (
         <div>
             <Title>Grid</Title>
             <div style={{ width: "200px", height: "400px" }}>
-                <Grid columnCount={2} columnWidth={100} rowHeight={100}>
+                <Grid columnCount="auto" columnWidth={100} rowHeight={100}>
                     {children}
                 </Grid>
             </div>

@@ -1,10 +1,12 @@
 import Grid from "..";
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 
-const dataset = new Array(6).fill(null).map((_, i) => {
-    return <div key={i}>{`row ${i}`}</div>;
-});
+const generate = (index: number = 6) => {
+    return new Array(index).fill(null).map((_, i) => {
+        return <div key={i}>{`row ${i}`}</div>;
+    });
+};
 
 describe("<Grid/>", () => {
     beforeAll(() => {
@@ -14,6 +16,8 @@ describe("<Grid/>", () => {
                 innerHeight: height,
                 outerWidth: width,
                 outerHeight: height,
+                offsetWidth: width,
+                offsetHeight: height,
             }).dispatchEvent(new this.Event("resize"));
         };
     });
@@ -22,14 +26,14 @@ describe("<Grid/>", () => {
         window.resizeTo(500, 500);
 
         render(
-            <div style={{ height: "200px", width: "400px" }}>
+            <div style={{ width: "200px", height: "400px" }}>
                 <Grid
                     columnCount={2}
                     rowHeight={100}
                     columnWidth={100}
                     scrollTop={100}
                 >
-                    {dataset}
+                    {generate()}
                 </Grid>
             </div>
         );
@@ -42,7 +46,7 @@ describe("<Grid/>", () => {
         window.resizeTo(500, 500);
 
         render(
-            <div style={{ height: "200px", width: "400px" }}>
+            <div style={{ width: "200px", height: "400px" }}>
                 <Grid
                     className="test-class"
                     columnCount={2}
@@ -50,7 +54,7 @@ describe("<Grid/>", () => {
                     columnWidth={100}
                     scrollTop={100}
                 >
-                    {dataset}
+                    {generate()}
                 </Grid>
             </div>
         );
@@ -66,7 +70,7 @@ describe("<Grid/>", () => {
 
         const onScroll = jest.fn();
         render(
-            <div style={{ height: "200px", width: "400px" }}>
+            <div style={{ width: "200px", height: "400px" }}>
                 <Grid
                     columnCount={2}
                     onScroll={onScroll}
@@ -74,7 +78,7 @@ describe("<Grid/>", () => {
                     columnWidth={100}
                     scrollTop={100}
                 >
-                    {dataset}
+                    {generate()}
                 </Grid>
             </div>
         );
@@ -86,29 +90,49 @@ describe("<Grid/>", () => {
         window.resizeTo(500, 500);
 
         render(
-            <div style={{ height: "200px", width: "400px" }}>
+            <div style={{ width: "200px", height: "400px" }}>
                 <Grid columnCount={2} rowHeight={100} columnWidth={100}>
-                    {dataset}
+                    {generate()}
                 </Grid>
             </div>
         );
 
-        const items = await screen.findAllByText(/row [0-9]/);
+        const items = await screen.getAllByText(/row [0-9]/);
         expect(items).toHaveLength(4);
     });
 
-    it("column count auto", async () => {
+    it("column count auto", () => {
         window.resizeTo(500, 500);
 
         render(
-            <div style={{ height: "400px", width: "200px" }}>
-                <Grid columnCount="auto" rowHeight={100} columnWidth={100}>
-                    {dataset}
+            <div style={{ width: "200px", height: "400px" }}>
+                <Grid rowHeight={100} columnWidth={100}>
+                    {generate()}
                 </Grid>
             </div>
         );
 
-        const items = await screen.findAllByText(/row [0-9]/);
+        waitFor(
+            () => {
+                const items = screen.getAllByText(/row [0-9]/);
+                expect(items).toHaveLength(4);
+            },
+            { timeout: 1000 }
+        );
+    });
+
+    it("column count trunc", async () => {
+        window.resizeTo(500, 500);
+
+        render(
+            <div style={{ width: "200px", height: "400px" }}>
+                <Grid columnCount={2} rowHeight={100} columnWidth={100}>
+                    {generate(7)}
+                </Grid>
+            </div>
+        );
+
+        const items = screen.getAllByText(/row [0-9]/);
         expect(items).toHaveLength(4);
     });
 });
