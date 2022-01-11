@@ -21,7 +21,7 @@ import { List } from "monolieta-virtual-scroll";
 
 const Example = () => {
     const rows = new Array(50000).fill(0).map((_, i) => (
-        <div key={i} syle={{ width: "100%", height: "100%" }}>
+        <div key={i} style={{ width: "100%", height: "100%" }}>
             {i}
         </div>
     ));

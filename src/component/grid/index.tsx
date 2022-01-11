@@ -1,11 +1,11 @@
-import Virtual from "../virtual";
 import { useRef } from "react";
+import Virtual from "../virtual";
 
 type PropTypes = {
     children: React.ReactNode[];
     className?: string;
-    columnCount: number;
-    columnWidth: number;
+    columnCount: number | "auto";
+    columnWidth: number | "auto";
     onScroll?: (scrollTop: number) => void;
     padding?: number;
     rowHeight: number;
@@ -13,6 +13,8 @@ type PropTypes = {
 };
 
 export const Grid = (props: PropTypes) => {
+    const { padding = 0 } = props;
+
     const gridRef = useRef<HTMLDivElement>(null);
 
     const renderer = (children: React.ReactNode, key: number) => (
@@ -20,7 +22,7 @@ export const Grid = (props: PropTypes) => {
             key={key}
             style={{
                 height: `${props.rowHeight}px`,
-                margin: `${props.padding ?? 0}px`,
+                margin: `${padding}px`,
                 width: `${props.columnWidth}px`,
             }}
         >
@@ -34,7 +36,7 @@ export const Grid = (props: PropTypes) => {
             columnCount={props.columnCount}
             columnWidth={props.columnWidth}
             onScroll={props.onScroll}
-            padding={props.padding}
+            padding={padding}
             ref={gridRef}
             renderer={renderer}
             rowHeight={props.rowHeight}

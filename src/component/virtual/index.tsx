@@ -6,17 +6,17 @@ import { forwardRef, useEffect } from "react";
 type PropTypes = {
     children: React.ReactNode[];
     className?: string;
-    columnCount: number;
+    columnCount: number | "auto";
     columnWidth: number | "auto";
     onScroll?: (scrollTop: number) => void;
-    padding?: number;
+    padding: number;
     renderer: (children: React.ReactNode, key: number) => React.ReactNode;
-    rowHeight: number;
+    rowHeight: number | "auto";
     scrollTop?: number;
 };
 
 const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
-    const { padding = 0, onScroll } = props;
+    const { onScroll } = props;
 
     const scrollRef = ref as React.MutableRefObject<HTMLDivElement>;
     const scrollPosition = useScroll(scrollRef, props.scrollTop);
@@ -27,31 +27,44 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
         }
     }, [scrollPosition, onScroll]);
 
-    const columns = props.columnCount;
+    const columnWidth = Math.floor(
+        (props.columnWidth === "auto"
+            ? scrollPosition?.width ?? 0
+            : props.columnWidth) +
+            props.padding * 2
+    );
+
+    const rowHeight = Math.floor(
+        (props.rowHeight === "auto"
+            ? scrollPosition?.height ?? 0
+            : props.rowHeight) +
+            props.padding * 2
+    );
+
+    const columnCount = Math.floor(
+        props.columnCount === "auto"
+            ? (scrollPosition?.width ?? 0) / columnWidth
+            : props.columnCount
+    );
+
+    const columns = columnCount;
     const total = props.children.length;
     const rows = useRow(columns, total);
 
-    const rowHeight = props.rowHeight + padding * 2;
-    const rowWidth =
-        (props.columnWidth === "auto"
-            ? scrollPosition?.size.width ?? 0
-            : props.columnWidth) +
-        padding * 2;
-
+    const totalWidth = columns * columnWidth;
     const totalHeight = rows * rowHeight;
-    const totalWidth = columns * rowWidth;
 
-    const offsetWidth = scrollRef.current ? scrollRef.current.clientWidth : 0;
+    const offsetWidth = scrollRef.current?.clientWidth ?? 0;
     const offsetX = offsetWidth - totalWidth;
 
     const scrollTop = scrollPosition?.scrollTop ?? 0;
-    const scrollHeight = scrollPosition?.size.height ?? 0;
+    const scrollHeight = scrollPosition?.height ?? 0;
 
     let startNode = Math.max(0, Math.floor(scrollTop / rowHeight));
     let visibleNodeCount = Math.ceil(scrollHeight / rowHeight) + 2;
     visibleNodeCount = Math.min(rows - startNode, visibleNodeCount) * columns;
 
-    const offsetY = startNode * rowHeight;
+    const translateY = startNode * rowHeight;
     startNode = startNode * columns;
 
     const visibleChildren = props.children
@@ -59,7 +72,7 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
         .map(props.renderer);
 
     const position = {
-        transform: `translateY(${offsetY}px)`,
+        transform: `translateY(${translateY}px)`,
         width: `calc(100% - ${offsetX}px)`,
     };
 

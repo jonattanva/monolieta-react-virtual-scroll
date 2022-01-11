@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 
-type Size = {
+export interface Scroll {
     height: number;
-    width: number;
-};
-
-interface VirtualScroll {
     scrollTop: number;
-    size: Size;
+    width: number;
 }
 
 export default (
     ref: React.MutableRefObject<HTMLDivElement>,
     scrollTop?: number
 ) => {
-    const [value, setValue] = useState<VirtualScroll>();
+    const [value, setValue] = useState<Scroll>();
 
     useEffect(() => {
         const scroll = ref.current;
@@ -23,21 +19,17 @@ export default (
         }
 
         setValue({
+            height: scroll.offsetHeight,
             scrollTop: scroll.scrollTop,
-            size: {
-                width: scroll.offsetWidth,
-                height: scroll.offsetHeight,
-            },
+            width: scroll.offsetWidth,
         });
 
         const onScroll = () => {
             requestAnimationFrame(() => {
                 setValue({
+                    height: scroll.offsetHeight,
                     scrollTop: scroll.scrollTop,
-                    size: {
-                        width: scroll.offsetWidth,
-                        height: scroll.offsetHeight,
-                    },
+                    width: scroll.offsetWidth,
                 });
             });
         };

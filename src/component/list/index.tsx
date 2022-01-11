@@ -11,6 +11,8 @@ type PropTypes = {
 };
 
 const List = (props: PropTypes) => {
+    const { padding = 0 } = props;
+
     const listRef = useRef<HTMLDivElement>(null);
 
     const renderer = (children: React.ReactNode, key: number) => (
@@ -31,7 +33,7 @@ const List = (props: PropTypes) => {
             columnCount={1}
             columnWidth="auto"
             onScroll={props.onScroll}
-            padding={props.padding}
+            padding={padding}
             ref={listRef}
             renderer={renderer}
             rowHeight={props.rowHeight}
