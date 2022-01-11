@@ -4,8 +4,8 @@ import Virtual from "../virtual";
 type PropTypes = {
     children: React.ReactNode[];
     className?: string;
-    columnCount: number | "auto";
-    columnWidth: number | "auto";
+    columnCount?: number | "auto";
+    columnWidth: number;
     onScroll?: (scrollTop: number) => void;
     padding?: number;
     rowHeight: number;
@@ -13,7 +13,7 @@ type PropTypes = {
 };
 
 export const Grid = (props: PropTypes) => {
-    const { padding = 0 } = props;
+    const { columnCount = "auto", padding = 0 } = props;
 
     const gridRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +33,7 @@ export const Grid = (props: PropTypes) => {
     return (
         <Virtual
             className={props.className}
-            columnCount={props.columnCount}
+            columnCount={columnCount}
             columnWidth={props.columnWidth}
             onScroll={props.onScroll}
             padding={padding}

@@ -96,4 +96,19 @@ describe("<Grid/>", () => {
         const items = await screen.findAllByText(/row [0-9]/);
         expect(items).toHaveLength(4);
     });
+
+    it("column count auto", async () => {
+        window.resizeTo(500, 500);
+
+        render(
+            <div style={{ height: "400px", width: "200px" }}>
+                <Grid columnCount="auto" rowHeight={100} columnWidth={100}>
+                    {dataset}
+                </Grid>
+            </div>
+        );
+
+        const items = await screen.findAllByText(/row [0-9]/);
+        expect(items).toHaveLength(4);
+    });
 });

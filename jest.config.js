@@ -6,4 +6,5 @@ module.exports = {
     moduleNameMapper: {
         "\\.(css)$": "identity-obj-proxy",
     },
+    testPathIgnorePatterns: ["!*.d.ts"],
 };
