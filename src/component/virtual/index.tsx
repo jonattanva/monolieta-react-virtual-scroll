@@ -1,16 +1,19 @@
 import "./index.css";
-import useRow from "../../hook/useRow";
 import useScroll from "../../hook/useScroll";
 import { forwardRef, useEffect } from "react";
+import useCalculateGrid from "../../hook/useCalculateGrid";
+import useCalculateSlice from "../../hook/useCalculateSlice";
+import useCalculateVirtualScroll from "../../hook/useCalculateVirtualScroll";
 
 type PropTypes = {
     children: React.ReactNode[];
     className?: string;
     columnCount: number | "auto";
     columnWidth: number | "auto";
+    direction: "vertical" | "horizontal";
     onScroll?: (scrollTop: number) => void;
     padding: number;
-    renderer: (children: React.ReactNode, key: number) => React.ReactNode;
+    rowCount: number | "auto";
     rowHeight: number | "auto";
     scrollTop?: number;
 };
@@ -47,34 +50,69 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
             : props.columnCount
     );
 
-    const columns = columnCount;
-    const total = props.children.length;
-    const rows = useRow(columns, total);
+    const rowCount = Math.floor(
+        props.rowCount === "auto"
+            ? (scrollPosition?.height ?? 0) / rowHeight
+            : props.rowCount
+    );
 
-    const totalWidth = columns * columnWidth;
+    const [rows, columns] = useCalculateGrid(
+        [rowCount, columnCount],
+        props.children.length,
+        props.direction
+    );
+
     const totalHeight = rows * rowHeight;
+    const totalWidth = columns * columnWidth;
 
-    const offsetWidth = scrollRef.current?.clientWidth ?? 0;
-    const offsetX = offsetWidth - totalWidth;
+    const clientWidth = scrollPosition?.width ?? 0;
+    const offsetX = clientWidth - totalWidth;
 
-    const scrollTop = scrollPosition?.scrollTop ?? 0;
-    const scrollHeight = scrollPosition?.height ?? 0;
+    const clientHeight = scrollPosition?.height ?? 0;
+    const offsetY = clientHeight - totalHeight;
 
-    let startNode = Math.max(0, Math.floor(scrollTop / rowHeight));
-    let visibleNodeCount = Math.ceil(scrollHeight / rowHeight) + 2;
-    visibleNodeCount = Math.min(rows - startNode, visibleNodeCount) * columns;
+    const [start, visibleNodeCount] = useCalculateSlice(
+        [columnWidth, rowHeight],
+        [columns, rows],
+        scrollPosition,
+        props.direction
+    );
 
-    const translateY = startNode * rowHeight;
-    startNode = startNode * columns;
+    const translateY = start * rowHeight;
+    const translateX = start * columnWidth;
+
+    const startNode = start * columns;
 
     const visibleChildren = props.children
         .slice(startNode, startNode + visibleNodeCount)
-        .map(props.renderer);
+        .map((children: React.ReactNode, key: number) => (
+            <div
+                key={key}
+                style={{
+                    height: `${rowHeight}px`,
+                    margin: `${props.padding}px`,
+                    width: `${columnWidth}px`,
+                }}
+            >
+                {children}
+            </div>
+        ));
 
-    const position = {
-        transform: `translateY(${translateY}px)`,
-        width: `calc(100% - ${offsetX}px)`,
-    };
+    const style = useCalculateVirtualScroll(
+        {
+            translate: {
+                x: translateX,
+                y: translateY,
+            },
+            offset: {
+                x: offsetX,
+                y: offsetY,
+            },
+            width: totalWidth,
+            height: totalHeight,
+        },
+        props.direction
+    );
 
     const className = !props.className
         ? "monolieta-virtual-scroll__main"
@@ -84,11 +122,11 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
         <div ref={ref} className={className} role="list">
             <div
                 className="monolieta-virtual-scroll__viewport"
-                style={{ height: totalHeight }}
+                style={style.viewport}
             >
                 <div
                     className="monolieta-virtual-scroll__body"
-                    style={position}
+                    style={style.body}
                 >
                     {visibleChildren}
                 </div>

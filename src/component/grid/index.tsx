@@ -6,6 +6,7 @@ type PropTypes = {
     className?: string;
     columnCount?: number | "auto";
     columnWidth: number;
+    direction?: "vertical" | "horizontal";
     onScroll?: (scrollTop: number) => void;
     padding?: number;
     rowHeight: number;
@@ -13,32 +14,20 @@ type PropTypes = {
 };
 
 export const Grid = (props: PropTypes) => {
-    const { columnCount = "auto", padding = 0 } = props;
+    const { columnCount = "auto", direction = "vertical", padding = 0 } = props;
 
     const gridRef = useRef<HTMLDivElement>(null);
-
-    const renderer = (children: React.ReactNode, key: number) => (
-        <div
-            key={key}
-            style={{
-                height: `${props.rowHeight}px`,
-                margin: `${padding}px`,
-                width: `${props.columnWidth}px`,
-            }}
-        >
-            {children}
-        </div>
-    );
 
     return (
         <Virtual
             className={props.className}
             columnCount={columnCount}
             columnWidth={props.columnWidth}
+            direction={direction}
             onScroll={props.onScroll}
             padding={padding}
             ref={gridRef}
-            renderer={renderer}
+            rowCount="auto"
             rowHeight={props.rowHeight}
             scrollTop={props.scrollTop}
         >

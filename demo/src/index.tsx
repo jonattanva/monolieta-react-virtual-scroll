@@ -20,6 +20,11 @@ const Main = () => (
             <div style={{ width: "200px", height: "400px" }}>
                 <List rowHeight={50}>{children}</List>
             </div>
+            <div style={{ width: "200px", height: "400px" }}>
+                <List columnWidth={50} direction="horizontal">
+                    {children}
+                </List>
+            </div>
         </div>
     </Body>
 );

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export interface Scroll {
     height: number;
+    scrollLeft: number;
     scrollTop: number;
     width: number;
 }
@@ -20,6 +21,7 @@ export default (
 
         setValue({
             height: scroll.offsetHeight,
+            scrollLeft: scroll.scrollLeft,
             scrollTop: scroll.scrollTop,
             width: scroll.offsetWidth,
         });
@@ -28,6 +30,7 @@ export default (
             requestAnimationFrame(() => {
                 setValue({
                     height: scroll.offsetHeight,
+                    scrollLeft: scroll.scrollLeft,
                     scrollTop: scroll.scrollTop,
                     width: scroll.offsetWidth,
                 });
