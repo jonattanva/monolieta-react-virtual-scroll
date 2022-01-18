@@ -15,10 +15,7 @@ List (rows) of elements
 | scrollTop               | number                        | Vertical offset      |
 
 ## Mockup
-<div width="600">
-    <img src="../.github/image/list_vertical.png" width="300" />
-    <img src="../.github/image/list_horizontal.png" width="300" />
-</div>
+<img src="../.github/image/list.png" width="300" />
 
 ## Usage
 ```jsx
