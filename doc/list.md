@@ -15,7 +15,7 @@ List (rows) of elements
 | scrollTop               | number                        | Vertical offset      |
 
 ## Mockup
-<img src="../.github/image/list.png" width="300" />
+<img src="../.github/image/list.png" width="600" />
 
 ## Usage
 ```jsx
