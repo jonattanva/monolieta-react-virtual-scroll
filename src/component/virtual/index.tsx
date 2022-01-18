@@ -1,6 +1,7 @@
 import "./index.css";
 import useScroll from "../../hook/useScroll";
 import { forwardRef, useEffect } from "react";
+import useStartNode from "../../hook/useStartNode";
 import useCalculateGrid from "../../hook/useCalculateGrid";
 import useCalculateSlice from "../../hook/useCalculateSlice";
 import useCalculateVirtualScroll from "../../hook/useCalculateVirtualScroll";
@@ -11,10 +12,11 @@ type PropTypes = {
     columnCount: number | "auto";
     columnWidth: number | "auto";
     direction: "vertical" | "horizontal";
-    onScroll?: (scrollTop: number) => void;
+    onScroll?: (scrollTop: number, scrollLeft: number) => void;
     padding: number;
     rowCount: number | "auto";
     rowHeight: number | "auto";
+    scrollLeft?: number;
     scrollTop?: number;
 };
 
@@ -22,11 +24,18 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
     const { onScroll } = props;
 
     const scrollRef = ref as React.MutableRefObject<HTMLDivElement>;
-    const scrollPosition = useScroll(scrollRef, props.scrollTop);
+    const scrollPosition = useScroll(
+        scrollRef,
+        props.scrollTop,
+        props.scrollLeft
+    );
 
     useEffect(() => {
         if (onScroll && scrollPosition) {
-            onScroll(scrollPosition?.scrollTop ?? 0);
+            onScroll(
+                scrollPosition?.scrollTop ?? 0,
+                scrollPosition?.scrollLeft ?? 0
+            );
         }
     }, [scrollPosition, onScroll]);
 
@@ -80,8 +89,7 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
 
     const translateY = start * rowHeight;
     const translateX = start * columnWidth;
-
-    const startNode = start * columns;
+    const startNode = useStartNode(start, [columns, rows], props.direction);
 
     const visibleChildren = props.children
         .slice(startNode, startNode + visibleNodeCount)

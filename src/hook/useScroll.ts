@@ -9,6 +9,7 @@ export interface Scroll {
 
 export default (
     ref: React.MutableRefObject<HTMLDivElement>,
+    scrollLeft?: number,
     scrollTop?: number
 ) => {
     const [value, setValue] = useState<Scroll>();
@@ -52,10 +53,21 @@ export default (
             return;
         }
 
-        if (scrollTop !== undefined) {
+        if (scrollTop) {
             scroll.scrollTop = scrollTop;
         }
     }, [ref, scrollTop]);
+
+    useEffect(() => {
+        const scroll = ref.current;
+        if (!scroll) {
+            return;
+        }
+
+        if (scrollLeft) {
+            scroll.scrollLeft = scrollLeft;
+        }
+    }, [ref, scrollLeft]);
 
     return value;
 };

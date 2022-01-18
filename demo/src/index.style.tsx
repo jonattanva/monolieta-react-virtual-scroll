@@ -30,3 +30,7 @@ export const Title = styled.div`
     margin-bottom: 8px;
     text-align: center;
 `;
+
+export const Item = styled.div`
+    margin: 8px 0;
+`

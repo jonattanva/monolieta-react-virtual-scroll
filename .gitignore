@@ -1,7 +1,7 @@
 .DS_Store
 
-coverage
-demo/node_modules
-dist
-node_modules
-types
+coverage/
+demo/
+dist/
+node_modules/
+types/

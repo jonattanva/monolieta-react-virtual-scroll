@@ -3,18 +3,24 @@
 List (rows) of elements
 
 ## Attributes
-| Property                | Type              | Required   | Description          |
-| ----------------------- | ----------------- | :--------: | -------------------- |
-| rowHeight               | number            |     ✓      | Fixed row height     |
-| onScroll                | function          |            | Callback invoked whenever the scroll offset changes |
-| scrollTop               | function          |            | Vertical offset      |
-| className               | string            |            | CSS class name       |
+| Property                | Type                          | Description          |
+| ----------------------- | ----------------------------- | -------------------- |
+| className               | string                        | CSS class name       |
+| columnWidth             | number                        | Fixed column width   |
+| direction               | "vertical" | "horizontal"     | Displacement direction |
+| onScroll                | function                      | Callback invoked whenever the scroll offset changes |
+| padding                 | number                        | Padding is used to create space around an element's content |
+| rowHeight               | number                        | Fixed row height     |
+| scrollLeft              | number                        | Horizontal offset    |
+| scrollTop               | number                        | Vertical offset      |
 
 ## Mockup
-<img src="../.github/image/list.png" width="300" />
+<div width="600">
+    <img src="../.github/image/list_vertical.png" width="300" />
+    <img src="../.github/image/list_horizontal.png" width="300" />
+</div>
 
 ## Usage
-
 ```jsx
 import ReactDOM from 'react-dom';
 import { List } from "monolieta-virtual-scroll";
