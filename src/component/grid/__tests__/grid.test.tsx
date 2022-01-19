@@ -12,12 +12,12 @@ describe("<Grid/>", () => {
     beforeAll(() => {
         window.resizeTo = function resizeTo(width, height) {
             Object.assign(this, {
-                innerWidth: width,
                 innerHeight: height,
-                outerWidth: width,
-                outerHeight: height,
-                offsetWidth: width,
+                innerWidth: width,
                 offsetHeight: height,
+                offsetWidth: width,
+                outerHeight: height,
+                outerWidth: width,
             }).dispatchEvent(new this.Event("resize"));
         };
     });
@@ -65,7 +65,7 @@ describe("<Grid/>", () => {
         );
     });
 
-    it("vertical offset", async () => {
+    it("vertical offset", () => {
         window.resizeTo(500, 500);
 
         const onScroll = jest.fn();
@@ -86,7 +86,7 @@ describe("<Grid/>", () => {
         expect(onScroll).toHaveBeenCalledTimes(1);
     });
 
-    it("visible elements", async () => {
+    it("visible elements", () => {
         window.resizeTo(500, 500);
 
         render(
@@ -97,7 +97,7 @@ describe("<Grid/>", () => {
             </div>
         );
 
-        const items = await screen.getAllByText(/row [0-9]/);
+        const items = screen.getAllByText(/row [0-9]/);
         expect(items).toHaveLength(4);
     });
 
@@ -121,7 +121,7 @@ describe("<Grid/>", () => {
         );
     });
 
-    it("column count trunc", async () => {
+    it("column count trunc", () => {
         window.resizeTo(500, 500);
 
         render(
