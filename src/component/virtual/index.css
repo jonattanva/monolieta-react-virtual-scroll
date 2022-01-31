@@ -1,34 +1,42 @@
 .monolieta-virtual-scroll__main {
-    align-items: stretch;
-    background: transparent;
-    display: flex;
-    height: 100%;
-    margin: 0;
-    overflow: auto;
-    position: relative;
-    transform: translateZ(0);
-    width: 100%;
-    will-change: scroll-position;
+  align-items: stretch;
+  background: transparent;
+  display: flex;
+  height: 100%;
+  margin: 0;
+  overflow: auto;
+  position: relative;
+  transform: translateZ(0);
+  width: 100%;
+  will-change: scroll-position;
 }
 
 .monolieta-virtual-scroll__viewport {
-    height: 100%;
-    overflow: hidden;
-    position: absolute;
-    transform: translateZ(0);
-    width: 100%;
-    will-change: transform;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  transform: translateZ(0);
+  width: 100%;
+  will-change: transform;
 }
 
 .monolieta-virtual-scroll__body {
-    align-content: flex-start;
-    align-items: flex-start;
-    contain: content;
-    display: flex;
-    flex-wrap: wrap;
-    height: 100%;
-    justify-content: flex-start;
-    margin: 0 auto;
-    padding: 0;
-    will-change: transform;
+  align-content: flex-start;
+  align-items: flex-start;
+  contain: content;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 100%;
+  justify-content: flex-start;
+  margin: 0 auto;
+  padding: 0;
+  will-change: transform;
+}
+
+.monolieta-virtual-scroll__row {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }

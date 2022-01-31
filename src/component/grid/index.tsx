@@ -2,36 +2,44 @@ import { useRef } from "react";
 import Virtual from "../virtual";
 
 type PropTypes = {
-    children: React.ReactNode[];
+    children?: React.ReactNode[][];
     className?: string;
-    columnCount?: number | "auto";
     columnWidth: number;
-    direction?: "vertical" | "horizontal";
-    onScroll?: (scrollTop: number) => void;
+    onScroll?: (scrollLeft: number, scrollTop: number) => void;
     padding?: number;
     rowHeight: number;
+    scrollLeft?: number;
     scrollTop?: number;
 };
 
-export const Grid = (props: PropTypes) => {
-    const { columnCount = "auto", direction = "vertical", padding = 0 } = props;
+const Grid = (props: PropTypes) => {
+    // prettier-ignore
+    const {
+        children = [],
+        padding = 0,
+    } = props;
 
     const gridRef = useRef<HTMLDivElement>(null);
+
+    const numColumns = children.reduce((previous, current) => {
+        return Math.max(previous, current.length);
+    }, 0);
 
     return (
         <Virtual
             className={props.className}
-            columnCount={columnCount}
             columnWidth={props.columnWidth}
-            direction={direction}
+            direction="mixed"
+            numColumns={numColumns}
+            numRows={children.length}
             onScroll={props.onScroll}
             padding={padding}
             ref={gridRef}
-            rowCount="auto"
             rowHeight={props.rowHeight}
+            scrollLeft={props.scrollLeft}
             scrollTop={props.scrollTop}
         >
-            {props.children}
+            {children}
         </Virtual>
     );
 };

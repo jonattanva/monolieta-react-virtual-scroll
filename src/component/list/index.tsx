@@ -1,42 +1,60 @@
 import { useRef } from "react";
 import Virtual from "../virtual";
-import usePrepare from "../../hook/usePrepare";
 
-type PropTypes = {
-    children: React.ReactNode[];
-    className?: string;
-    columnWidth?: number | "auto";
-    direction?: "vertical" | "horizontal";
-    onScroll?: (scrollTop: number, scrollLeft: number) => void;
-    padding?: number;
-    rowHeight?: number | "auto";
-    scrollLeft?: number;
-    scrollTop?: number;
-};
+type PropTypes =
+    | {
+          children?: React.ReactNode[];
+          className?: string;
+          columnWidth?: never;
+          direction: "vertical";
+          onScroll?: (scrollLeft: number, scrollTop: number) => void;
+          padding?: number;
+          rowHeight: number;
+          scrollLeft?: never;
+          scrollTop?: number;
+      }
+    | {
+          children?: React.ReactNode[];
+          className?: string;
+          columnWidth: number;
+          direction: "horizontal";
+          onScroll?: (scrollLeft: number, scrollTop: number) => void;
+          padding?: number;
+          rowHeight?: never;
+          scrollLeft?: number;
+          scrollTop?: never;
+      };
 
 const List = (props: PropTypes) => {
     const {
-        direction = "vertical",
+        children = [],
         columnWidth = "auto",
-        rowHeight = "auto",
         padding = 0,
+        rowHeight = "auto",
     } = props;
 
-    const listRef = useRef<HTMLDivElement>(null);
-    const prepare = usePrepare(rowHeight, columnWidth, direction);
+    const gridRef = useRef<HTMLDivElement>(null);
+
+    const [numRows, numColumns] =
+        props.direction === "vertical"
+            ? [children.length, 1]
+            : [1, children.length];
 
     return (
         <Virtual
-            {...prepare}
             className={props.className}
-            direction={direction}
+            columnWidth={columnWidth}
+            direction={props.direction}
+            numColumns={numColumns}
+            numRows={numRows}
             onScroll={props.onScroll}
             padding={padding}
-            ref={listRef}
+            ref={gridRef}
+            rowHeight={rowHeight}
             scrollLeft={props.scrollLeft}
             scrollTop={props.scrollTop}
         >
-            {props.children}
+            {children}
         </Virtual>
     );
 };

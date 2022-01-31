@@ -2,15 +2,19 @@ import Grid from "..";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 
-const generate = (index: number = 6) => {
-    return new Array(index).fill(null).map((_, i) => {
-        return <div key={i}>{`row ${i}`}</div>;
-    });
-};
-
 describe("<Grid/>", () => {
     beforeAll(() => {
         window.resizeTo = function resizeTo(width, height) {
+            Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
+                configurable: true,
+                value: width,
+            });
+
+            Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
+                configurable: true,
+                value: height,
+            });
+
             Object.assign(this, {
                 innerHeight: height,
                 innerWidth: width,
@@ -22,117 +26,67 @@ describe("<Grid/>", () => {
         };
     });
 
-    it("general style", () => {
-        window.resizeTo(500, 500);
+    it("visible elements", () => {
+        window.resizeTo(200, 400);
 
         render(
-            <div style={{ width: "200px", height: "400px" }}>
-                <Grid
-                    columnCount={2}
-                    rowHeight={100}
-                    columnWidth={100}
-                    scrollTop={100}
-                >
-                    {generate()}
-                </Grid>
-            </div>
+            <Grid rowHeight={100} columnWidth={100}>
+                {new Array(10)
+                    .fill(0)
+                    .map((_, i) =>
+                        new Array(2)
+                            .fill(0)
+                            .map((_, j) => (
+                                <div key={j}>{`row ${i} column ${j}`}</div>
+                            ))
+                    )}
+            </Grid>
         );
 
-        const container = screen.getByRole("list");
-        expect(container).toHaveClass("monolieta-virtual-scroll__main");
+        const items = screen.getAllByText(/row [0-9] column [0-9]/);
+        expect(items).toHaveLength(12);
+    });
+
+    it("on scroll", () => {
+        window.resizeTo(200, 400);
+        const onScroll = jest.fn();
+
+        render(
+            <Grid
+                columnWidth={100}
+                onScroll={onScroll}
+                rowHeight={100}
+                scrollLeft={100}
+                scrollTop={100}
+            >
+                {new Array(10)
+                    .fill(0)
+                    .map(() =>
+                        new Array(10)
+                            .fill(0)
+                            .map((_, j) => <div key={j}>{`row ${j}`}</div>)
+                    )}
+            </Grid>
+        );
+
+        expect(onScroll).toHaveBeenCalledTimes(2);
     });
 
     it("custom style", () => {
         window.resizeTo(500, 500);
 
         render(
-            <div style={{ width: "200px", height: "400px" }}>
-                <Grid
-                    className="test-class"
-                    columnCount={2}
-                    rowHeight={100}
-                    columnWidth={100}
-                    scrollTop={100}
-                >
-                    {generate()}
-                </Grid>
-            </div>
+            <Grid
+                className="test-class"
+                rowHeight={100}
+                columnWidth={100}
+                scrollTop={100}
+            ></Grid>
         );
 
         const container = screen.getByRole("list");
         expect(container).toHaveClass(
             "monolieta-virtual-scroll__main test-class"
         );
-    });
-
-    it("vertical offset", () => {
-        window.resizeTo(500, 500);
-
-        const onScroll = jest.fn();
-        render(
-            <div style={{ width: "200px", height: "400px" }}>
-                <Grid
-                    columnCount={2}
-                    onScroll={onScroll}
-                    rowHeight={100}
-                    columnWidth={100}
-                    scrollTop={100}
-                >
-                    {generate()}
-                </Grid>
-            </div>
-        );
-
-        expect(onScroll).toHaveBeenCalledTimes(1);
-    });
-
-    it("visible elements", () => {
-        window.resizeTo(500, 500);
-
-        render(
-            <div style={{ width: "200px", height: "400px" }}>
-                <Grid columnCount={2} rowHeight={100} columnWidth={100}>
-                    {generate()}
-                </Grid>
-            </div>
-        );
-
-        const items = screen.getAllByText(/row [0-9]/);
-        expect(items).toHaveLength(4);
-    });
-
-    it("column count auto", () => {
-        window.resizeTo(500, 500);
-
-        render(
-            <div style={{ width: "200px", height: "400px" }}>
-                <Grid rowHeight={100} columnWidth={100}>
-                    {generate()}
-                </Grid>
-            </div>
-        );
-
-        waitFor(
-            () => {
-                const items = screen.getAllByText(/row [0-9]/);
-                expect(items).toHaveLength(4);
-            },
-            { timeout: 1000 }
-        );
-    });
-
-    it("column count trunc", () => {
-        window.resizeTo(500, 500);
-
-        render(
-            <div style={{ width: "200px", height: "400px" }}>
-                <Grid columnCount={2} rowHeight={100} columnWidth={100}>
-                    {generate(7)}
-                </Grid>
-            </div>
-        );
-
-        const items = screen.getAllByText(/row [0-9]/);
-        expect(items).toHaveLength(4);
     });
 });

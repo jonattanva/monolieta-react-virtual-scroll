@@ -1,18 +1,45 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-export interface Scroll {
+export type Scroll = {
     height: number;
     scrollLeft: number;
     scrollTop: number;
     width: number;
-}
+};
 
 export default (
     ref: React.MutableRefObject<HTMLDivElement>,
     scrollLeft?: number,
     scrollTop?: number
 ) => {
-    const [value, setValue] = useState<Scroll>();
+    const [value, setValue] = useState<Scroll>({
+        height: 0,
+        scrollLeft: 0,
+        scrollTop: 0,
+        width: 0,
+    });
+
+    useEffect(() => {
+        const scroll = ref.current;
+        if (!scroll) {
+            return;
+        }
+
+        if (scrollTop) {
+            scroll.scrollTop = scrollTop;
+        }
+    }, [ref, scrollTop]);
+
+    useEffect(() => {
+        const scroll = ref.current;
+        if (!scroll) {
+            return;
+        }
+
+        if (scrollLeft) {
+            scroll.scrollLeft = scrollLeft;
+        }
+    }, [ref, scrollLeft]);
 
     useEffect(() => {
         const scroll = ref.current;
@@ -46,28 +73,6 @@ export default (
             window.removeEventListener("resize", onScroll);
         };
     }, [ref]);
-
-    useEffect(() => {
-        const scroll = ref.current;
-        if (!scroll) {
-            return;
-        }
-
-        if (scrollTop) {
-            scroll.scrollTop = scrollTop;
-        }
-    }, [ref, scrollTop]);
-
-    useEffect(() => {
-        const scroll = ref.current;
-        if (!scroll) {
-            return;
-        }
-
-        if (scrollLeft) {
-            scroll.scrollLeft = scrollLeft;
-        }
-    }, [ref, scrollLeft]);
 
     return value;
 };

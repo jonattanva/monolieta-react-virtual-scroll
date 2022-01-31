@@ -1,20 +1,23 @@
 import "./index.css";
+import Row from "./index.row";
+import Body from "./index.body";
+import Item from "./index.item";
+import Viewport from "./index.viewport";
 import useScroll from "../../hook/useScroll";
-import { forwardRef, useEffect } from "react";
-import useStartNode from "../../hook/useStartNode";
-import useCalculateGrid from "../../hook/useCalculateGrid";
-import useCalculateSlice from "../../hook/useCalculateSlice";
-import useCalculateVirtualScroll from "../../hook/useCalculateVirtualScroll";
+import useAutoSize from "../../hook/useAutoSize";
+import { Children, forwardRef, useEffect } from "react";
+import usePrepareGroup from "../../hook/usePrepareGroup";
+import type { Direction } from "../../hook/useVisibleChildren";
 
 type PropTypes = {
-    children: React.ReactNode[];
+    children: React.ReactNode[] | React.ReactNode[][];
     className?: string;
-    columnCount: number | "auto";
     columnWidth: number | "auto";
-    direction: "vertical" | "horizontal";
-    onScroll?: (scrollTop: number, scrollLeft: number) => void;
+    direction: Direction;
+    numColumns: number;
+    numRows: number;
+    onScroll?: (scrollLeft: number, scrollTop: number) => void;
     padding: number;
-    rowCount: number | "auto";
     rowHeight: number | "auto";
     scrollLeft?: number;
     scrollTop?: number;
@@ -26,101 +29,86 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
     const scrollRef = ref as React.MutableRefObject<HTMLDivElement>;
     const scrollPosition = useScroll(
         scrollRef,
-        props.scrollTop,
-        props.scrollLeft
+        props.scrollLeft,
+        props.scrollTop
     );
 
     useEffect(() => {
-        if (onScroll && scrollPosition) {
-            onScroll(
-                scrollPosition?.scrollTop ?? 0,
-                scrollPosition?.scrollLeft ?? 0
-            );
+        if (onScroll) {
+            onScroll(scrollPosition.scrollLeft, scrollPosition.scrollTop);
         }
-    }, [scrollPosition, onScroll]);
+    }, [onScroll, scrollPosition]);
 
-    const columnWidth = Math.floor(
-        (props.columnWidth === "auto"
-            ? scrollPosition?.width ?? 0
-            : props.columnWidth) +
-            props.padding * 2
+    const columnWidth = useAutoSize(
+        props.columnWidth,
+        scrollPosition.width,
+        props.padding
     );
 
-    const rowHeight = Math.floor(
-        (props.rowHeight === "auto"
-            ? scrollPosition?.height ?? 0
-            : props.rowHeight) +
-            props.padding * 2
+    const rowHeight = useAutoSize(
+        props.rowHeight,
+        scrollPosition.height,
+        props.padding
     );
 
-    const columnCount = Math.floor(
-        props.columnCount === "auto"
-            ? (scrollPosition?.width ?? 0) / columnWidth
-            : props.columnCount
+    const totalHeight = props.numRows * rowHeight;
+    const totalWidth = props.numColumns * columnWidth;
+
+    const [startNodeX, visibleNodeCountX] = usePrepareGroup(
+        scrollPosition.scrollLeft,
+        scrollPosition.width,
+        props.numColumns,
+        columnWidth
     );
 
-    const rowCount = Math.floor(
-        props.rowCount === "auto"
-            ? (scrollPosition?.height ?? 0) / rowHeight
-            : props.rowCount
+    const [startNodeY, visibleNodeCountY] = usePrepareGroup(
+        scrollPosition.scrollTop,
+        scrollPosition.height,
+        props.numRows,
+        rowHeight
     );
 
-    const [rows, columns] = useCalculateGrid(
-        [rowCount, columnCount],
-        props.children.length,
-        props.direction
-    );
+    const translateX = startNodeX * columnWidth;
+    const translateY = startNodeY * rowHeight;
 
-    const totalHeight = rows * rowHeight;
-    const totalWidth = columns * columnWidth;
+    let visibleChildren = [];
+    if (props.direction === "mixed") {
+        visibleChildren = props.children
+            .slice(startNodeY, startNodeY + visibleNodeCountY)
+            .map((it, key) => (
+                <Row key={key}>
+                    {Children.toArray(it)
+                        .slice(startNodeX, startNodeX + visibleNodeCountX)
+                        .map((it, key) => (
+                            <Item
+                                key={key}
+                                height={rowHeight}
+                                padding={props.padding}
+                                width={columnWidth}
+                            >
+                                {it}
+                            </Item>
+                        ))}
+                </Row>
+            ));
+    } else {
+        const [start, end] =
+            props.direction === "vertical"
+                ? [startNodeY, startNodeY + visibleNodeCountY]
+                : [startNodeX, startNodeX + visibleNodeCountX];
 
-    const clientWidth = scrollPosition?.width ?? 0;
-    const offsetX = clientWidth - totalWidth;
-
-    const clientHeight = scrollPosition?.height ?? 0;
-    const offsetY = clientHeight - totalHeight;
-
-    const [start, visibleNodeCount] = useCalculateSlice(
-        [columnWidth, rowHeight],
-        [columns, rows],
-        scrollPosition,
-        props.direction
-    );
-
-    const translateY = start * rowHeight;
-    const translateX = start * columnWidth;
-    const startNode = useStartNode(start, [columns, rows], props.direction);
-
-    const visibleChildren = props.children
-        .slice(startNode, startNode + visibleNodeCount)
-        .map((children: React.ReactNode, key: number) => (
-            <div
-                key={key}
-                style={{
-                    height: `${rowHeight}px`,
-                    margin: `${props.padding}px`,
-                    width: `${columnWidth}px`,
-                }}
-            >
-                {children}
-            </div>
+        visibleChildren = props.children.slice(start, end).map((it, key) => (
+            <Row key={key}>
+                <Item
+                    height={rowHeight}
+                    padding={props.padding}
+                    width={columnWidth}
+                >
+                    {it}
+                </Item>
+            </Row>
         ));
-
-    const style = useCalculateVirtualScroll(
-        {
-            translate: {
-                x: translateX,
-                y: translateY,
-            },
-            offset: {
-                x: offsetX,
-                y: offsetY,
-            },
-            width: totalWidth,
-            height: totalHeight,
-        },
-        props.direction
-    );
+    }
 
     const className = !props.className
         ? "monolieta-virtual-scroll__main"
@@ -128,17 +116,11 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
 
     return (
         <div ref={ref} className={className} role="list">
-            <div
-                className="monolieta-virtual-scroll__viewport"
-                style={style.viewport}
-            >
-                <div
-                    className="monolieta-virtual-scroll__body"
-                    style={style.body}
-                >
+            <Viewport height={totalHeight} width={totalWidth}>
+                <Body translateX={translateX} translateY={translateY}>
                     {visibleChildren}
-                </div>
-            </div>
+                </Body>
+            </Viewport>
         </div>
     );
 });
