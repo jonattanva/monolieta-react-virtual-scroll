@@ -3,21 +3,20 @@
 List (rows) of elements
 
 ## Attributes
-| Property                | Type                          | Description          |
-| ----------------------- | ----------------------------- | -------------------- |
-| className               | string                        | CSS class name       |
-| columnWidth             | number                        | Fixed column width   |
-| direction               | "vertical" | "horizontal"     | Displacement direction |
-| onScroll                | function                      | Callback invoked whenever the scroll offset changes |
-| padding                 | number                        | Padding is used to create space around an element's content |
-| rowHeight               | number                        | Fixed row height     |
-| scrollLeft              | number                        | Horizontal offset    |
-| scrollTop               | number                        | Vertical offset      |
 
-## Mockup
-<img src="../.github/image/list.png" width="600" />
+| Property    | Type                       | Description                                                 |
+| ----------- | -------------------------- | ----------------------------------------------------------- |
+| className   | string                     | CSS class name                                              |
+| columnWidth | number                     | Fixed column width                                          |
+| direction   | "vertical" or "horizontal" | Displacement direction                                      |
+| onScroll    | function                   | Callback invoked whenever the scroll offset changes         |
+| padding     | number                     | Padding is used to create space around an element's content |
+| rowHeight   | number                     | Fixed row height                                            |
+| scrollLeft  | number                     | Horizontal offset                                           |
+| scrollTop   | number                     | Vertical offset                                             |
 
 ## Usage
+
 ```jsx
 import ReactDOM from 'react-dom';
 import { List } from "monolieta-virtual-scroll";
@@ -31,7 +30,7 @@ const Example = () => {
 
     return (
         <div style={{ width: "400px", height: "300px" }}>
-            <List rowHeight={100}>
+            <List direction="vertical" rowHeight={100}>
                 {rows}
             </Grid>
         </div>
