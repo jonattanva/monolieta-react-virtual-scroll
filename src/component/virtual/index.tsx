@@ -7,7 +7,11 @@ import useScroll from "../../hook/useScroll";
 import useAutoSize from "../../hook/useAutoSize";
 import { Children, forwardRef, useEffect } from "react";
 import usePrepareGroup from "../../hook/usePrepareGroup";
-import type { Direction } from "../../hook/useVisibleChildren";
+
+export const DIRECTION_MIXED = "mixed";
+export const DIRECTION_VERTICAL = "vertical";
+
+type Direction = "horizontal" | "vertical" | "mixed";
 
 type PropTypes = {
     children: React.ReactNode[] | React.ReactNode[][];
@@ -72,18 +76,17 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
     const translateY = startNodeY * rowHeight;
 
     let visibleChildren = [];
-    if (props.direction === "mixed") {
+    if (props.direction === DIRECTION_MIXED) {
         visibleChildren = props.children
             .slice(startNodeY, startNodeY + visibleNodeCountY)
             .map((it, key) => (
-                <Row key={key}>
+                <Row key={key} padding={props.padding}>
                     {Children.toArray(it)
                         .slice(startNodeX, startNodeX + visibleNodeCountX)
                         .map((it, key) => (
                             <Item
                                 key={key}
                                 height={rowHeight}
-                                padding={props.padding}
                                 width={columnWidth}
                             >
                                 {it}
@@ -93,17 +96,13 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
             ));
     } else {
         const [start, end] =
-            props.direction === "vertical"
+            props.direction === DIRECTION_VERTICAL
                 ? [startNodeY, startNodeY + visibleNodeCountY]
                 : [startNodeX, startNodeX + visibleNodeCountX];
 
         visibleChildren = props.children.slice(start, end).map((it, key) => (
-            <Row key={key}>
-                <Item
-                    height={rowHeight}
-                    padding={props.padding}
-                    width={columnWidth}
-                >
+            <Row key={key} padding={props.padding}>
+                <Item height={rowHeight} width={columnWidth}>
                     {it}
                 </Item>
             </Row>
@@ -117,7 +116,11 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
     return (
         <div ref={ref} className={className} role="list">
             <Viewport height={totalHeight} width={totalWidth}>
-                <Body translateX={translateX} translateY={translateY}>
+                <Body
+                    padding={props.padding}
+                    translateX={translateX}
+                    translateY={translateY}
+                >
                     {visibleChildren}
                 </Body>
             </Viewport>

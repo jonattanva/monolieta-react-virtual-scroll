@@ -1,7 +1,6 @@
 type PropTypes = {
     children: React.ReactNode;
     height: number;
-    padding: number;
     width: number;
 };
 
@@ -10,7 +9,6 @@ const Item = (props: PropTypes) => (
         className="monolieta-virtual-scroll-item"
         style={{
             height: `${props.height}px`,
-            padding: `${props.padding}px`,
             width: `${props.width}px`,
         }}
     >

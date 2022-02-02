@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import Virtual from "../virtual";
+import Virtual, { DIRECTION_MIXED } from "../virtual";
 
 type PropTypes = {
     children?: React.ReactNode[][];
@@ -29,7 +29,7 @@ const Grid = (props: PropTypes) => {
         <Virtual
             className={props.className}
             columnWidth={props.columnWidth}
-            direction="mixed"
+            direction={DIRECTION_MIXED}
             numColumns={numColumns}
             numRows={children.length}
             onScroll={props.onScroll}

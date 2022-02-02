@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import Virtual from "../virtual";
+import Virtual, { DIRECTION_VERTICAL } from "../virtual";
 
 type PropTypes =
     | {
@@ -36,7 +36,7 @@ const List = (props: PropTypes) => {
     const gridRef = useRef<HTMLDivElement>(null);
 
     const [numRows, numColumns] =
-        props.direction === "vertical"
+        props.direction === DIRECTION_VERTICAL
             ? [children.length, 1]
             : [1, children.length];
 

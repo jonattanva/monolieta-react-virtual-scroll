@@ -1,5 +1,6 @@
 type PropTypes = {
     children: React.ReactNode;
+    padding: number;
     translateX: number;
     translateY: number;
 };
@@ -12,6 +13,7 @@ const Body = (props: PropTypes) => {
         <div
             className="monolieta-virtual-scroll__body"
             style={{
+                gap: `${props.padding}px`,
                 transform: `translate(${translateX}px, ${translateY}px)`,
             }}
         >
