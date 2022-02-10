@@ -1,9 +1,9 @@
-import { DIRECTION_MIXED } from "../constant";
+import { Direction } from "../types";
 
-export default (direction: string, className: string = "") => {
+export default (direction: Direction, className: string = "") => {
     let result = "monolieta-virtual-scroll__main";
 
-    if (direction !== DIRECTION_MIXED) {
+    if (direction !== "mixed") {
         result += ` monolieta-virtual-scroll__main--${direction}`;
     }
 

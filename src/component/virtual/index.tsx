@@ -4,24 +4,22 @@ import Body from "./index.body";
 import Item from "./index.item";
 import Viewport from "./index.viewport";
 import useScroll from "../../hook/useScroll";
+import { Direction, Size } from "../../types";
 import useAutoSize from "../../hook/useAutoSize";
 import useClassName from "../../hook/useClassName";
 import { Children, forwardRef, useEffect } from "react";
 import usePrepareGroup from "../../hook/usePrepareGroup";
-import { DIRECTION_VERTICAL, DIRECTION_MIXED } from "../../constant";
-
-export type Direction = "horizontal" | "vertical" | "mixed";
 
 type PropTypes = {
     children: React.ReactNode[] | React.ReactNode[][];
     className?: string;
-    columnWidth: number | "auto";
+    columnWidth: Size;
     direction: Direction;
     numColumns: number;
     numRows: number;
     onScroll?: (scrollLeft: number, scrollTop: number) => void;
     padding: number;
-    rowHeight: number | "auto";
+    rowHeight: Size;
     scrollLeft?: number;
     scrollTop?: number;
 };
@@ -77,7 +75,7 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
     const translateY = startNodeY * rowHeight;
 
     let visibleChildren = [];
-    if (props.direction === DIRECTION_MIXED) {
+    if (props.direction === "mixed") {
         visibleChildren = props.children
             .slice(startNodeY, startNodeY + visibleNodeCountY)
             .map((it, key) => (
@@ -97,7 +95,7 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
             ));
     } else {
         const [start, end] =
-            props.direction === DIRECTION_VERTICAL
+            props.direction === "vertical"
                 ? [startNodeY, startNodeY + visibleNodeCountY]
                 : [startNodeX, startNodeX + visibleNodeCountX];
 

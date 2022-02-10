@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import Virtual from "../virtual";
-import type { Direction } from "../virtual";
-import { DIRECTION_MIXED } from "../../constant";
+import { Direction } from "../../types";
 
 type PropTypes = {
     children?: React.ReactNode[][];
@@ -19,7 +18,7 @@ const Grid = (props: PropTypes) => {
     // prettier-ignore
     const {
         children = [],
-        direction = DIRECTION_MIXED,
+        direction = "mixed",
         padding = 0
     } = props;
 
