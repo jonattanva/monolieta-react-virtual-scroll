@@ -11,6 +11,14 @@
     will-change: scroll-position;
 }
 
+.monolieta-virtual-scroll__main--horizontal {
+    overflow-y: hidden;
+}
+
+.monolieta-virtual-scroll__main--vertical {
+    overflow-x: hidden;
+}
+
 .monolieta-virtual-scroll__viewport {
     height: 100%;
     overflow: hidden;
@@ -41,6 +49,6 @@
     justify-content: flex-start;
 }
 
-.monolieta-virtual-scroll-item {
+.monolieta-virtual-scroll__item {
     box-sizing: border-box;
 }

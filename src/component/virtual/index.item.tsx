@@ -6,7 +6,7 @@ type PropTypes = {
 
 const Item = (props: PropTypes) => (
     <div
-        className="monolieta-virtual-scroll-item"
+        className="monolieta-virtual-scroll__item"
         style={{
             height: `${props.height}px`,
             width: `${props.width}px`,

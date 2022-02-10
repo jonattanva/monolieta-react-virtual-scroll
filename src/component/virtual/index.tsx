@@ -5,13 +5,12 @@ import Item from "./index.item";
 import Viewport from "./index.viewport";
 import useScroll from "../../hook/useScroll";
 import useAutoSize from "../../hook/useAutoSize";
+import useClassName from "../../hook/useClassName";
 import { Children, forwardRef, useEffect } from "react";
 import usePrepareGroup from "../../hook/usePrepareGroup";
+import { DIRECTION_VERTICAL, DIRECTION_MIXED } from "../../constant";
 
-export const DIRECTION_MIXED = "mixed";
-export const DIRECTION_VERTICAL = "vertical";
-
-type Direction = "horizontal" | "vertical" | "mixed";
+export type Direction = "horizontal" | "vertical" | "mixed";
 
 type PropTypes = {
     children: React.ReactNode[] | React.ReactNode[][];
@@ -42,6 +41,8 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
             onScroll(scrollPosition.scrollLeft, scrollPosition.scrollTop);
         }
     }, [onScroll, scrollPosition]);
+
+    const className = useClassName(props.direction, props.className);
 
     const columnWidth = useAutoSize(
         props.columnWidth,
@@ -108,10 +109,6 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
             </Row>
         ));
     }
-
-    const className = !props.className
-        ? "monolieta-virtual-scroll__main"
-        : `monolieta-virtual-scroll__main ${props.className}`;
 
     return (
         <div ref={ref} className={className} role="list">

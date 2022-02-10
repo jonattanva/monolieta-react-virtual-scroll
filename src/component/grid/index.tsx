@@ -1,10 +1,13 @@
 import { useRef } from "react";
-import Virtual, { DIRECTION_MIXED } from "../virtual";
+import Virtual from "../virtual";
+import type { Direction } from "../virtual";
+import { DIRECTION_MIXED } from "../../constant";
 
 type PropTypes = {
     children?: React.ReactNode[][];
     className?: string;
     columnWidth: number;
+    direction?: Direction;
     onScroll?: (scrollLeft: number, scrollTop: number) => void;
     padding?: number;
     rowHeight: number;
@@ -16,7 +19,8 @@ const Grid = (props: PropTypes) => {
     // prettier-ignore
     const {
         children = [],
-        padding = 0,
+        direction = DIRECTION_MIXED,
+        padding = 0
     } = props;
 
     const gridRef = useRef<HTMLDivElement>(null);
@@ -29,7 +33,7 @@ const Grid = (props: PropTypes) => {
         <Virtual
             className={props.className}
             columnWidth={props.columnWidth}
-            direction={DIRECTION_MIXED}
+            direction={direction}
             numColumns={numColumns}
             numRows={children.length}
             onScroll={props.onScroll}

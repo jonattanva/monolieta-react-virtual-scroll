@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import Virtual, { DIRECTION_VERTICAL } from "../virtual";
+import Virtual from "../virtual";
+import { DIRECTION_VERTICAL } from "../../constant";
 
 type PropTypes =
     | {
