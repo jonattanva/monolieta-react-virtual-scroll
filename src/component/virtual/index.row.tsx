@@ -1,3 +1,5 @@
+import { getPaddingStyle } from "../../style";
+
 type PropTypes = {
     children: React.ReactNode;
     padding: number;
@@ -6,7 +8,7 @@ type PropTypes = {
 const Row = (props: PropTypes) => (
     <div
         className="monolieta-virtual-scroll__row"
-        style={{ gap: `${props.padding}px` }}
+        style={getPaddingStyle(props.padding)}
     >
         {props.children}
     </div>

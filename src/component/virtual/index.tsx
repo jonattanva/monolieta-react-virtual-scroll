@@ -1,31 +1,32 @@
-import "./index.css";
-import Row from "./index.row";
-import Body from "./index.body";
-import Item from "./index.item";
-import Viewport from "./index.viewport";
 import useScroll from "../../hook/useScroll";
-import { Direction, Size } from "../../types";
+import { forwardRef, useEffect } from "react";
 import useAutoSize from "../../hook/useAutoSize";
-import useClassName from "../../hook/useClassName";
-import { Children, forwardRef, useEffect } from "react";
+import useTranslate from "../../hook/useTranslate";
+import { Direction, Size, Style } from "../../types";
 import usePrepareGroup from "../../hook/usePrepareGroup";
+import { getSizeStyle, getTranslateStyle } from "../../style";
 
 type PropTypes = {
-    children: React.ReactNode[] | React.ReactNode[][];
-    className?: string;
     columnWidth: Size;
+    dataSource: React.ReactNode[] | React.ReactNode[][];
     direction: Direction;
     numColumns: number;
     numRows: number;
     onScroll?: (scrollLeft: number, scrollTop: number) => void;
     padding: number;
+    render: React.FunctionComponent<any>;
     rowHeight: Size;
     scrollLeft?: number;
     scrollTop?: number;
+    style: Style;
 };
 
 const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
-    const { onScroll } = props;
+    // prettier-ignore
+    const {
+        onScroll,
+        render: Render
+    } = props;
 
     const scrollRef = ref as React.MutableRefObject<HTMLDivElement>;
     const scrollPosition = useScroll(
@@ -39,8 +40,6 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
             onScroll(scrollPosition.scrollLeft, scrollPosition.scrollTop);
         }
     }, [onScroll, scrollPosition]);
-
-    const className = useClassName(props.direction, props.className);
 
     const columnWidth = useAutoSize(
         props.columnWidth,
@@ -71,58 +70,43 @@ const Virtual = forwardRef<HTMLDivElement, PropTypes>((props, ref) => {
         rowHeight
     );
 
-    const translateX = startNodeX * columnWidth;
-    const translateY = startNodeY * rowHeight;
-
-    let visibleChildren = [];
-    if (props.direction === "mixed") {
-        visibleChildren = props.children
-            .slice(startNodeY, startNodeY + visibleNodeCountY)
-            .map((it, key) => (
-                <Row key={key} padding={props.padding}>
-                    {Children.toArray(it)
-                        .slice(startNodeX, startNodeX + visibleNodeCountX)
-                        .map((it, key) => (
-                            <Item
-                                key={key}
-                                height={rowHeight}
-                                width={columnWidth}
-                            >
-                                {it}
-                            </Item>
-                        ))}
-                </Row>
-            ));
-    } else {
-        const [start, end] =
-            props.direction === "vertical"
-                ? [startNodeY, startNodeY + visibleNodeCountY]
-                : [startNodeX, startNodeX + visibleNodeCountX];
-
-        visibleChildren = props.children.slice(start, end).map((it, key) => (
-            <Row key={key} padding={props.padding}>
-                <Item height={rowHeight} width={columnWidth}>
-                    {it}
-                </Item>
-            </Row>
-        ));
-    }
+    const translateY = useTranslate(startNodeY * rowHeight);
+    const translateX = useTranslate(startNodeX * columnWidth);
 
     return (
-        <div ref={ref} className={className} role="list">
-            <Viewport height={totalHeight} width={totalWidth}>
-                <Body
-                    padding={props.padding}
-                    translateX={translateX}
-                    translateY={translateY}
+        <div
+            className={`monolieta-virtual-scroll__main ${props.style.main}`}
+            ref={ref}
+            role="list"
+        >
+            <div
+                className="monolieta-virtual-scroll__viewport"
+                style={getSizeStyle(totalHeight, totalWidth)}
+            >
+                <div
+                    className={props.style.body}
+                    style={getTranslateStyle(
+                        translateX,
+                        translateY,
+                        props.padding
+                    )}
                 >
-                    {visibleChildren}
-                </Body>
-            </Viewport>
+                    <Render
+                        columnWidth={columnWidth}
+                        direction={props.direction}
+                        padding={props.padding}
+                        rowHeight={rowHeight}
+                        startNodeX={startNodeX}
+                        startNodeY={startNodeY}
+                        visibleNodeCountX={visibleNodeCountX}
+                        visibleNodeCountY={visibleNodeCountY}
+                    >
+                        {props.dataSource}
+                    </Render>
+                </div>
+            </div>
         </div>
     );
 });
-
-Virtual.displayName = "Virtual";
 
 export default Virtual;

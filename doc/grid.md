@@ -4,15 +4,16 @@ Lists in an organized grid.
 
 ## Attributes
 
-| Property    | Type     | Description                                                 |
-| ----------- | -------- | ----------------------------------------------------------- |
-| className   | string   | CSS class name                                              |
-| columnWidth | number   | Fixed column width                                          |
-| onScroll    | function | Callback invoked whenever the scroll offset changes         |
-| padding     | number   | Padding is used to create space around an element's content |
-| rowHeight   | number   | Fixed row height                                            |
-| scrollLeft  | number   | Horizontal offset                                           |
-| scrollTop   | number   | Vertical offset                                             |
+| Property    | Type                       | Description                                                 |
+| ----------- | -------------------------- | ----------------------------------------------------------- |
+| className   | string                     | CSS class name                                              |
+| columnWidth | number                     | Fixed column width                                          |
+| direction   | "vertical", "horizontal" or "mixed" | Displacement direction                             |
+| onScroll    | function                   | Callback invoked whenever the scroll offset changes         |
+| padding     | number                     | Padding is used to create space around an element's content |
+| rowHeight   | number                     | Fixed row height                                            |
+| scrollLeft  | number                     | Horizontal offset                                           |
+| scrollTop   | number                     | Vertical offset                                             |
 
 ## Usage
 

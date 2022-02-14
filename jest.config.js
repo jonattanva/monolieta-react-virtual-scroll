@@ -7,4 +7,5 @@ module.exports = {
         "\\.(css)$": "identity-obj-proxy",
     },
     testPathIgnorePatterns: ["!*.d.ts"],
+    setupFilesAfterEnv: ["<rootDir>/jest-setup.ts"],
 };

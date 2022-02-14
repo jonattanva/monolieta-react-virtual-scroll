@@ -4,19 +4,22 @@
     display: flex;
     height: 100%;
     margin: 0;
-    overflow: auto;
     position: relative;
     transform: translateZ(0);
     width: 100%;
     will-change: scroll-position;
 }
 
-.monolieta-virtual-scroll__main--horizontal {
-    overflow-y: hidden;
+.monolieta-virtual-scroll__main--mixed {
+    overflow: auto;
 }
 
 .monolieta-virtual-scroll__main--vertical {
     overflow-x: hidden;
+}
+
+.monolieta-virtual-scroll__main--horizontal {
+    overflow-y: hidden;
 }
 
 .monolieta-virtual-scroll__viewport {
@@ -42,13 +45,18 @@
     will-change: transform;
 }
 
+.monolieta-virtual-scroll__body--horizontal {
+    flex-direction: row;
+}
+
+.monolieta-virtual-scroll__body--vertical {
+    flex-direction: column;
+}
+
 .monolieta-virtual-scroll__row {
     align-items: flex-start;
     display: flex;
+    gap: 0;
     flex-direction: row;
     justify-content: flex-start;
-}
-
-.monolieta-virtual-scroll__item {
-    box-sizing: border-box;
 }
