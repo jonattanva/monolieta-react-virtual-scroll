@@ -24,7 +24,7 @@
     "identity-obj-proxy": "~3.0.0",
     "jest": "~27.5.1",
     "postcss": "~8.4.6",
-    "rollup": "~2.67.2",
+    "rollup": "~2.68.0",
     "rollup-plugin-dts": "~4.1.0",
     "rollup-plugin-peer-deps-external": "~2.2.4",
     "rollup-plugin-postcss": "~4.0.2",
