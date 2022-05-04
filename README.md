@@ -1,4 +1,3 @@
-[![monolieta-virtual-scroll](https://badgen.net/bundlephobia/minzip/monolieta-virtual-scroll)](https://bundlephobia.com/result?p=monolieta-virtual-scroll)
 [![Coverage Status](https://coveralls.io/repos/github/jonattanva/monolieta-virtual-scroll/badge.svg?branch=main)](https://coveralls.io/github/jonattanva/monolieta-virtual-scroll?branch=main)
 
 # Monolieta-Virtual-Scroll
