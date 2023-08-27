@@ -23,7 +23,7 @@
     "@types/react": "~18.2.0",
     "identity-obj-proxy": "~3.0.0",
     "jest": "~28.1.0",
-    "jest-environment-jsdom": "~29.5.0",
+    "jest-environment-jsdom": "~29.6.4",
     "postcss": "~8.4.14",
     "rollup": "~2.79.1",
     "rollup-plugin-dts": "~4.2.2",
